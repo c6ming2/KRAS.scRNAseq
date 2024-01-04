@@ -63,9 +63,7 @@ for (i in ident_list[1:4]) {
 }
 
 #merge doubleFinder
-merged <- merge(c[[1]],y=c(c[[2]],c[[3]],c[[4]],c[[5]],c[[6]]))
-merged <- 
-  c[[1]]@meta.data[,"DF_hi.lo"] <- 'Singlet'
+c[[1]]@meta.data[,"DF_hi.lo"] <- 'Singlet'
 c[[1]]@meta.data$DF_hi.lo[which(c[[1]]@meta.data$DF.classifications_0.25_0.08_1509 == "Doublet")] <- "Doublet-High Confidience"
 c[[1]]@meta.data$DF_hi.lo[which(c[[1]]@meta.data$DF.classifications_0.25_0.08_1509 == "Doublet" & c[[1]]@meta.data$DF.classifications_0.25_0.08_1420 == "Singlet")] <- "Doublet-Low Confidience"
 c[[2]]@meta.data[,"DF_hi.lo"] <- 'Singlet'
@@ -78,18 +76,14 @@ c[[4]]@meta.data[,"DF_hi.lo"] <- 'Singlet'
 c[[4]]@meta.data$DF_hi.lo[which(c[[4]]@meta.data$DF.classifications_0.25_0.09_1012 == "Doublet" & c[[4]]@meta.data$DF.classifications_0.25_0.09_951 == "Singlet")] <- "Doublet-Low Confidience"
 c[[4]]@meta.data$DF_hi.lo[which(c[[4]]@meta.data$DF.classifications_0.25_0.09_1012 == "Doublet")] <- "Doublet-High Confidience"
 
-## Plot results ---------------------------------------------------------------------------
-#scRNA@meta.data[,"DF_hi.lo"] <- scRNA@meta.data$DF.classifications_0.25_0.29_5423
-#scRNA@meta.data$DF_hi.lo[which(scRNA@meta.data$DF_hi.lo == "Doublet" & scRNA@meta.data$DF.classifications_0.25_0.29_5157 == "Singlet")] <- "Doublet-Low Confidience"
-#scRNA@meta.data$DF_hi.lo[which(scRNA@meta.data$DF_hi.lo == "Doublet")] <- "Doublet-High Confidience"
-table(merged@meta.data$DF_hi.lo)
-
+merged <- merge(c[[1]],y=c(c[[2]],c[[3]],c[[4]]))
 scRNA@meta.data$DF_hi.lo <- merged@meta.data$DF_hi.lo
 
 ## plot doubleFinder
 DimPlot(scRNA, reduction = "umap", group.by ="DF_hi.lo",cols =c("black","red","gold"))+
   theme(legend.position = "bottom")+
   DimPlot(scRNA, reduction = "umap", group.by ="seurat_clusters")
+
 #drop double
 scRNA_Singlet <- subset(scRNA,DF_hi.lo == 'Singlet')
 
