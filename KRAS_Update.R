@@ -28,17 +28,18 @@ scRNA <- subset(scRNA, subset = nFeature_RNA > 200 & nFeature_RNA < 6000 & perce
 scRNA  = SCTransform(scRNA, verbose = TRUE)
 #PCA
 scRNA = RunPCA(scRNA, verbose = FALSE)
+scRNA=RunHarmony(scRNA,'orig.ident')
 #Plot PCA elbow
 ElbowPlot(scRNA, ndims = 50)
 #cluster
-scRNA = RunUMAP(scRNA, dims = 1:30, verbose = FALSE)
-scRNA = RunTSNE(scRNA, dims = 1:30, verbose = FALSE)
+scRNA = RunUMAP(scRNA, dims = 1:30,reduction = 'harmony', verbose = FALSE)
+scRNA = RunTSNE(scRNA, dims = 1:30,reduction = 'harmony', verbose = FALSE)
 #best resolution
-scRNA_test = FindNeighbors(scRNA, verbose = FALSE)
+scRNA_test = FindNeighbors(scRNA,reduction = 'harmony', verbose = FALSE)
 scRNA_test = FindClusters(scRNA_test, resolution = c(seq(0,1.6,0.1)), verbose = FALSE)
 clustree(scRNA_test, prefix = "SCT_snn_res.")
 #RESOLUTION=1.1
-scRNA = FindNeighbors(scRNA, verbose = FALSE)
+scRNA = FindNeighbors(scRNA,reduction = 'harmony', verbose = FALSE)
 scRNA = FindClusters(scRNA, resolution = 1.1, verbose = FALSE)
 
 a=list()
